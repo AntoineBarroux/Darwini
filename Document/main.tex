@@ -76,6 +76,7 @@ Les données que nous avons choisit de garder sont les suivantes :
 \begin{itemize}
 \item L'angle entre la direction de notre robot et la position du robot adverse.
 \item L'angle entre la direction du canon de notre robot et la position du robot adverse.
+\item L'angle entre la position du radar de notre robot et la position du robot adverse.
 \item La distance entre notre robot et l'adversaire.
 \item L'énérgie restante de notre robot.
 \item La vitesse de notre robot.
@@ -86,21 +87,21 @@ Les données que nous avons choisit de garder sont les suivantes :
 \subsection{Les données de sortie}
 
 \subsubsection{Rôle}
-Les données de sortie représentent les décisions que le robot va prendre après traitement par le perceptron. Pour permettre à notre robot d'apprendre plus facilement, on ne lui apprend que quelques décisions à la fois, par exemple nous avons privilégié le déplacement du robot (ne pas se cogner dans les murs, éviter les balles de l'adversaires, etc) à la décision de tirer car sinon notre robot restait immobile et tirait sur l'adversaire en continu, sans adopter de réelle stratégie. Sachant que sur Robocode, le robot qui tire sur son adversaire perd de la vie à chaque tir, cette conduite était suicidaire.
+Les données de sortie représentent les décisions que le robot va prendre après traitement par le perceptron. Pour permettre à notre robot d'apprendre plus facilement, on ne lui apprend que quelques comportements à la fois, voire un seul. Par exemple, nous avons privilégié le déplacement du robot (ne pas entrer en collision avec les murs, éviter les balles de l'adversaires, etc) à la décision de tirer. En effet, le cas écheant, notre robot restait immobile et tirait sur l'adversaire en continu, sans adopter de réelle stratégie. Sachant que dans l'environnement Robocode, le robot qui tire sur son adversaire perd de la vie à chaque tir, cette conduite était suicidaire.
 
 \subsubsection{Données choisies}
 Les données de sortie retenues sont :
 
 \begin{itemize}
-\item tirer sur l'adversaire ou non
-\item angle de direction
-\item angle de direction du radar
-\item angle de direction du canon
-\item avancer
+\item Décision de tirer.
+\item Décision de tourner.
+\item Décision de tourner le radar.
+\item Décision de tourner le canon.
+\item Décision d'avancer.
 \end{itemize}
 
 \subsection{Perceptron}
-Le perceptron est ce qui lie les données d'entrée aux données de sortie.
+Le perceptron correspond à l'ensemble des liaisons et des opérations constituant le réseau de neurones et permettant de lier les données d'entrée aux données de sortie.
 
 \subsubsection{Définition}
 Un perceptron multicouche est un classiffieur dit neuronal formel organisé en
@@ -131,7 +132,7 @@ Chaque neurone de la couche de sortie correspond à une action du robot. Il est 
 résultat de la multiplication des valeurs des neurones de la couche cachée, auxquelles
 nous avons appliqué une fonction Relu, par les poids des liens entres neurones cachés
 et neurones de sortie.
-Ensuite, notre robot prend sa décision en fonction de la valeur des neurones de sortie.
+Ensuite, notre robot prend sa décision en fonction de la valeur du neurone de sortie correspondant.
 
 \subsubsection{Implémentation}
 Le perception est implémenté en 4 classes Java.
@@ -143,20 +144,26 @@ entrée-cachée et l'autre les poids des liens des couches cachée-sortie. Ces p
 Ainsi nous disposons d'une fonction qui prend les valeurs des données d'entrée
 choisies et les transforme en un vecteur et effectue les différentes applications
 numériques. On obtient donc une matrice dont on prendra autant de premiers coefficients qu'il y a de neurones de sortie.
-\item Une classe matrix car les poids des différents neurones sont présentés sous forme matricielle.
+\item Une classe Matrix car les poids des différents neurones sont présentés sous forme matricielle.
 \end{itemize}
 
 \subsection{L'algorithme génétique}
-Pour obtenir un robot performant, il faut donc que les poids du perceptrons soient adaptés. L'intérêt de l'algorithme génétique est que le robot va trouver lui-même la combinaison idéale des poids. Pour ce faire nous allons utiliser la théorie de l'évolution.
+Pour obtenir un robot performant, il faut donc que les poids du perceptrons soient adaptés. L'intérêt de l'algorithme génétique est que le robot va trouver lui-même la combinaison idéale des poids de son perceptron. Pour ce faire, nous allons utiliser la théorie de l'évolution.
 
 \subsubsection{La Fitness}
-Pour commencer il nous faut savoir évaluer la performance d'un robot lors de son combat. Pour cela nous utilisons une méthode baptisée "fitness" qui, a la fin d'un combat nous génère un résultat qui sera le score du robot. Cette fitness peut être changée en fonction des résultats que l'on veut obtenir, par exemple si l'on souhaite que notre robot évite les murs on peut enlever des points au robot à chaque fois qu'il tape dans un mur, ainsi lorsqu'on gardera le meilleur individu ce sera forcément celui qui a le moins tapé dans un mur.
-Notre fitness actuelle est la suivante :
+Pour commencer il nous faut savoir évaluer la performance d'un robot lors d'un combat. Pour cela, nous utilisons une méthode fitness qui, à la fin de chaque combat, nous génère un résultat qui sera le score du robot. Cette fitness peut être changée en fonction des résultats que l'on souhaite obtenir. Par exemple, si l'on souhaite que notre robot favorise le comportement "éviter les murs", on peut enlever des points au robot à chaque fois qu'il entre en collision avec un mur. Ainsi, lorsque l'algorithme génétique va sélectionner les meilleurs individus, ce sont les individus les mieux adapté au comportement "éviter les murs" qui seront conservé, et leur gène sera retransmis aux générations futures. La fitness telle qu'elle était présente au départ était basée sur les dégâts que l'on cause à l'adversaire, le fait de gagner une partie et le taux de tirs réussis. Nous avons décider d'adopter une autre méthode car nous pensons qu'il est presque impossible de faire prendre les décisions basique à notre robot en se basant uniquement sur leur taux de victoire. En effet, il est très dur avec cette fitness de séparer les robots les plus mauvais des robots "un peu moins mauvais", car ils perdaient tous leur combat en tirant aléatoirement.
+Nous avons utilisé beaucoup de fitness différentes pour essayer de faire adopter des comportements différents à notre robot. Voici la fitness que nous avons testé pour le comportement "éviter un mur" : 
+
 \begin{lstlisting}
- weightedScore = 6 * bulletDamage + 6 * survival  
-+  1 * ramDamage + 300 * (hits / (hits + missed));
+fitness = 20 * bulletDamage
+                            + 10 * survival
+                            + ramDamage
+                            + 5*totalScore
+                            + victory
+                            - 1000*hitsWall
+                            - 5*hitByBullet
  \end{lstlisting}
- Elle est donc influencée positivement par les dégâts causés à l'adversaire, par le canon ou par collision, le fait de gagner la partie, et le taux de tirs réussis. 
+ Elle est donc influencée très négativement si jamais le robot entre en collision avec un mur.
 
 \subsubsection{Populations et individus}
 Nous allons donc créer une population, c'est à dire un ensemble d'individus et les faire combattre. grâce à la fitness, nous allons pouvoir classer ces individus du plus fort au plus faible et conserver les meilleurs individus. Les poids des individus de la nouvelle génération seront calculés en fonction de la moyenne et de l'écart-type des poids des meilleurs individus de l'ancienne génération. Nous incluont également le meilleur individu de la génération précédente dans la nouvelle génération. Cet algorithme nous permet après maintes générations de populations d'obtenir le meilleur robot.
