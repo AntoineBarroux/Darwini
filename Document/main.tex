@@ -27,69 +27,66 @@ travers d'un perceptron, appris par un algorithme génétique.
 \newpage
 
 \section{Objectifs du projet}
-Notre projet a pour but de créer un robot qui apprenne seul à se battre pour qu'il puisse d'adapter aux différents adversaires qui lui feront face. Ce robot est donc doté d'un perceptron ou réseau de neurones qui lui permettra de réfléchir et d'agir selon différentes situations. A la fin du projet nous attendons que notre robot obtienne de meilleurs scores et batte plus des enemis plus forts que lorsque nous avons repris ce projet.
+Notre projet a pour but de créer un robot qui apprenne à se battre de lui-même afin de s'adapter aux différents adversaires qui lui feront face. Ce robot est donc doté d'un perceptron, ou réseau de neurones, qui lui permettra de réfléchir et d'agir dans différentes situations. Nos attentes pour la fin de ce projet sont d'obtenir de meilleurs résultats pour notre robot en combat, et donc également d'améliorer l'algorithme de prise de décision.
+
 
 \newpage
 
 \section{Outils utilisés}
 
 \subsection{Robocode}
-Robocode est un jeu vidéo à but éducatif créé et distribué par IBM destiné à l'apprentissage du langage Java. Il nous permet de créer notre propre robot et de le faire se battre contre un ou plusieurs robots par défaut fournis par le jeu. Les robots sont représentés sous forme de tanks qui combattent dans un terrain.
+Robocode est un jeu vidéo à but éducatif créé et distribué par IBM. Il est destiné à l'apprentissage du langage Java. Il nous permet de créer notre propre robot et de le faire se battre contre un ou plusieurs robots par défaut fournis par le jeu. Les robots sont représentés sous forme de tanks qui combattent dans un terrain.
 
 \subsection{Langage et format}
 
 \subsubsection{Java}
-Comme expliqué precédemment, Robocode a été créé dans le but d'apprendre le Java donc notre robot a été implémenté en Java.
+Robocode propose deux langages pour le développement de l'intelligence artificielle des robots : le Java ou le .NET. Darwini existant depuis maintenant trois ans, nous avons utilisé le Java car c'est le langage qui a été utilisé depuis le début du projet.
 
 \subsubsection{XML}
-Le perceptron de chaque individu est stocké en XML dans le projet.
+Chaque robot généré est stocké sous la forme de son perceptron, au format XML. 
 
-\subsection{Environnement de développement}
+\subsection{Outils de développement}
 
 \subsubsection{IntelliJ}
-L'IDE IntelliJ était utilisé par le groupe précédent et nous avait été présenté en cours, de plus il nous semblait plus simple d'utilisation qu'Eclipse c'est pourquoi nous l'avons choisi.
+L'IDE IntelliJ était utilisé par le groupe précédent et nous avait été présenté en cours. De plus il nous semblait plus simple d'utilisation qu'Eclipse, c'est pourquoi nous l'avons choisi.
 
 \subsubsection{GitHub}
-Nous avons créé un répertoire GitHub afin de pouvoir travailler autant chez nous qu'à l'INSA. De plus Git gère le fait que plusieurs personnes travaillent simultanément sur le même fichier ou permet de dupliquer le projet en "branche" lorsqu'une modification importante est en cours mais qu'elle ne fonctionne pas encore ce qui permet à la fois d'avoir un prototype fonctionnel et un prototype en développement. Nous avons choisi GitHub contrairement à GitLab car nous n'avons pas trouvé de projet similaire sur internet et nous serions ravis si notre travail pouvait aider certaines personnes à découvrir Robocode ou les réseaux de neurones.
+Nous avons créé un répertoire GitHub afin de pouvoir travailler autant chez nous qu'à l'INSA. De plus Git gère le fait que plusieurs personnes travaillent simultanément sur le même fichier ou permet de dupliquer le projet en "branche" lorsqu'une modification importante est en cours mais qu'elle ne fonctionne pas encore ce qui permet à la fois d'avoir un prototype fonctionnel et un prototype en développement. Nous avons choisi GitHub contrairement à GitLab car nous voulions conserver ce projet open-source.
 
 \subsubsection{API de Robocode}
-La documentation de Robocode fournie par IBM est à la base de ce projet.
+La documentation de Robocode fournie par IBM est à la base de ce projet. Elle contient à la fois une documentation complète du fonctionnement du jeu, mais également la documentation technique nous permettant de récupérer les données du jeu pendant un combat, sans quoi ce projet ne pourrait avancer.
 
 \subsubsection{Trello}
-Nous avons utilisé Trello, un outil de gestion de projet gratuit en ligne qui permet de créer des tâches dans trois tableaux : A faire, en cours et fait. Il y a également la possibilité d'assigner des tâches à certaines personnes ou encore d'ajouter une date limite à certaines tâches, et cela permet visuellement de voir l'avancement du projet.
+Nous avons utilisé Trello, un outil de gestion de projet gratuit en ligne qui permet de créer des tâches sous forme de post-its à placer dans des tableaux. Il y a également la possibilité d'assigner des tâches à certaines personnes ou encore d'ajouter une date limite à certaines tâches, et cela permet de constater visuellement l'avancement du projet.
 
 \newpage
 
 \section{Travail effectué}
 \subsection{Le fonctionnement du jeu}
-Une partie de Robocode commence par la création d'un robot puis il est envoyé dans un combat dans lequel il doit récupérer des informations, et utiliser son perceptron afin de prendre des décisions. Notre robot est constitué d'un radar afin d'apercevoir l'enemi, d'un canon afin de tirer sur son adversaire et de chenilles pour se diriger. Ces trois composants peuvent tourner indépendamment les uns des autres. Nous allons aborder plus en détails comment le robot récupère les informations, le fonctionnement du perceptron, la prise de décision et le fonctionnement de l'algorithme génétique.
+Une partie de Robocode commence par la création d'un robot qui est envoyé en combat contre un adversaire parmi une liste de robots fournie par robocode. C'est un combat dans lequel il va devoir récupérer des informations et les utiliser dans son perceptron afin de prendre des décisions. Notre robot est constitué d'un radar afin d'apercevoir l'ennemi, d'un canon afin de tirer sur son adversaire et de chenilles pour se diriger. Ces trois composants peuvent tourner indépendamment les unes des autres. Nous allons aborder plus en détails les différentes phases du processus : la récupération des informations, le fonctionnement du perceptron, la prise de décision et le fonctionnement de l'algorithme génétique.
 
 \subsection{Les données d'entrées}
 
 \subsubsection{Rôle}
-Les données récupérées par le robot sont essentielles à la prise de décisions car elles sont les neurones d'entrée du perceptron. Le robot récupère des informations importantes pour le jeu telles la position de l'enemi ou encore le niveau de sa barre de vie et des informations secondaires telles la couleur des adversaires. La difficulté consiste à trier ces informations et ne garder que les plus pertinentes. De plus, il a fallut modifier certaines informations, par exemple Robocode nous fournit les coordonnées de l'adversaire mais nous avons remarqué que notre robot est bien plus performant si nous lui donnons plutôt la distance qui le sépare de son adversaire. Cela vaut également pour la distance entre notre robot et le mur le plus proche afin qu'il évite de cogner dans les murs pendant toute la partie.
+Les données récupérées par le robot sont essentielles à la prise de décisions car elles représentent les neurones d'entrée du perceptron. Le robot récupère des informations importantes pour le jeu telles que la position de l'ennemi, sa direction ou encore ses points de vie restant. La difficulté consiste à trier ces informations et ne garder que les plus pertinentes. En outre, il a fallu traiter certaines données afin d'optimiser le comportement de notre robot. C'est le cas pour la position de l'ennemi, que nous pouvons récupérer grâce à l'API, qui se révèle bien plus efficace si on lui donne directement la distance qui sépare notre robot de son adversaire. Le fonctionnement est le même pour la distance séparant notre robot du prochain mur, afin qu'il se déplace correctement.
 
 \subsubsection{Données choisies}
 Les données que nous avons choisit de garder sont les suivantes :
 
 \begin{itemize}
-\item ll'angle de direction de l'adversaire
-\item L'angle de direction de notre radar relatif à l'angle de direction du robot adverse
-scanné.
-\item la distance entre notre robot et l'adversaire
-\item l'énérgie restante à notre robot
-\item la vitesse de l'adversaire
-\item notre vitesse
-\item notre angle de direction
-\item l'angle de direction de notre radar
-\item l'angle de direction de notre canon
-\item la distance entre notre robot et le mur le plus proche
+\item L'angle entre la direction de notre robot et la position du robot adverse.
+\item L'angle entre la direction du canon de notre robot et la position du robot adverse.
+\item La distance entre notre robot et l'adversaire.
+\item L'énérgie restante de notre robot.
+\item La vitesse de notre robot.
+\item La vitesse de l'adversaire.
+\item La distance entre notre robot et le mur le plus proche.
 \end{itemize}
 
 \subsection{Les données de sortie}
 
 \subsubsection{Rôle}
-Les données de sortie sont les décisions que le robot aura prises à l'aide du perceptron. Pour permettre à notre robot d'apprendre plus facilement, on ne lui apprends que quelques décisions à la fois, par exemple nous avons privilégié le déplacement du robot (ne pas se cogner dans les murs, éviter les balles de l'adversaires, etc) à la décision de tirer car sinon notre robot restait immobile et tirait sur l'adversaire en continu. Sachant que sur Robocode, le robot qui tire sur son adversaire perds de la vie à chaque tir, cette conduite était suicidaire.
+Les données de sortie représentent les décisions que le robot va prendre après traitement par le perceptron. Pour permettre à notre robot d'apprendre plus facilement, on ne lui apprend que quelques décisions à la fois, par exemple nous avons privilégié le déplacement du robot (ne pas se cogner dans les murs, éviter les balles de l'adversaires, etc) à la décision de tirer car sinon notre robot restait immobile et tirait sur l'adversaire en continu, sans adopter de réelle stratégie. Sachant que sur Robocode, le robot qui tire sur son adversaire perd de la vie à chaque tir, cette conduite était suicidaire.
 
 \subsubsection{Données choisies}
 Les données de sortie retenues sont :
