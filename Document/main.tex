@@ -166,7 +166,7 @@ fitness = 20 * bulletDamage
  Elle est donc influencée très négativement si jamais le robot entre en collision avec un mur.
 
 \subsubsection{Populations et individus}
-Nous allons donc créer une population, c'est à dire un ensemble d'individus et les faire combattre. grâce à la fitness, nous allons pouvoir classer ces individus du plus fort au plus faible et conserver les meilleurs individus. Les poids des individus de la nouvelle génération seront calculés en fonction de la moyenne et de l'écart-type des poids des meilleurs individus de l'ancienne génération. Nous incluont également le meilleur individu de la génération précédente dans la nouvelle génération. Cet algorithme nous permet après maintes générations de populations d'obtenir le meilleur robot.
+La première étape de l'algorithme génétique consiste en la création d'une population d'individus. Chacun de ces individus va combattre un robot prédéfini de Robocode, combat grâce auquel on va pouvoir calculer sa fitness. Les individus sont alors classés du meilleur au plus mauvais. La population suivante sera générée à partir des meilleurs individus de cette génération. Chaque nouvel individu aura un perceptron dont les poids seront calculés à partir de l'écart-type et de la moyenne des poids des meilleurs individus de la génération précédente. Nous incluons également dans la nouvelle génération un certain nombre des meilleurs individus de la génération précédente. Le but de cet algorithme est d'obtenir l'individu le mieux adapté aux contraintes imposées par la fitness après un grand nombre de générations.
 
 \newpage
 
@@ -178,18 +178,18 @@ A compléter après les derniers tests
 \section{Notre expérience}
 
 \subsection{Premier semestre}
-Le permier semestre a été principalement consacré à la compréhension du projet et au debogage du code du groupe précédent. Nous avons restructuré le code et redéfinit certaines fonctions ainsi que la fitness et effectué quelques tests.
+Le premier semestre a été consacré à la compréhension théorique du projet et à la prise en main du code existant. Nous avons décidé de restructurer le code et le modèle de données qui était en place afin de clarifier le code. Nous avons fait nos premiers tests concernant les données d'entrée et de sortie et avons décidé de refondre complètement l'algorithme génétique qui était améliorable.
+
 
 \subsection{Second semestre}
-Lors du second semestre nous avons changé le fonctionnement de l'algorithme génétique, qui générait initialement la population suivante à partir de deux individus et non pas à partir des moyennes et ecart-types des meilleurs individus. Nous avons notamment ajouté le fait d'inclure le meilleur individu d'une population à l'autre, modifié les fonctions appliquées dans le perceptron, les données d'entrées ou de sorties.
+Lors du second semestre, nous avons modifié l'algorithme génétique au niveau de la génération des individus de la génération suivante. Dans la première version, chaque individu était le résultat d'un cross entre deux individus dans les meilleurs de la population précédente. Nous avons décidé de générer les individus à partir de la moyenne et de l'écart-type de tous les individus de la génération précédente. Nous avons également décidé de modifier la fonction d'activation utilisée dans les neurones de la couche cachée pour utiliser la fonction ReLU. Nous avons décidé d'implémenter un algorithme ELM (Extrem Learning Machine). Le principe est que la matrice des poids d'entrée du perceptron est générée une fois pour toute à la création de l'individu. Ces poids ne changeront jamais. Pour conserver une bonne diversité, étant donné que les poids appliquées aux données d'entrée sont constants, il faut un nombre de neurones cachés assez élevé. Nous avons également travaillé sur les données d'entrée et de sortie afin d'essayer de faire apprendre un comportement à notre robot.
 
 \subsection{Répartition du travail}
-Nous avons organisé des séances de travail collectives et pris des rendez-vous avec notre encadrant régulièrement, notamment lors d'avancées ou de décisions importantes. Le répertoire Git et le tableau de tâches sur Trello nous a permis de travailler chacun de notre côté lorsque nous avions du temps libre.
+Nous avons organisé des séances de travail collectives pendant lesquelles nous nous sommes organisés en créant des tâches sur l'outil Trello. Chaque tâche était assigné à un membre du groupe, permettant d'être au courant de qui travaille sur quelle évolution. Nous avons utilisé un tableau Kanban sur Trello afin de ne pas se perdre dans le travail effectué et les tâches à accomplir. Nous avions donc trois colonnes ToDo, Doing et Done, lesquelles contenant les tickets correspondant. L'utilisation de Git nous a également permis de facilement travailler chacun de son côté sans empiéter sur le travail de chacun.
 
 \subsection{Conclusion}
-Ce projet nous a permis d'améliorer nos compétences de travail en équipe, de comprendre cxe qu'était un réseau de neurones, d'améliorer nos méthodes de gestion de projet via l'outil Trello et de mettre en pratique nos connaissances en Java et XML. il nous a également appris à monter en compétence sur un sujet qui nous était inconnu de manière quasiment autonome car une fois le principe de base expliqué il a fallu déterminer quels algorithmes étaient les plus adaptés ou quelles solutions étaient viables.
-Nous avons tous été très satisfaits de participer à ce projet car il nous a permis de découvrir un domaine passionnant et d'actualité.
-
+D'un point de vue théorique, ce projet nous a permis d'appréhender les notions qui entourent les réseaux de neurones. Il nous a également appris à monter en compétences sur un projet assez abstrait : il est en effet assez difficile d'obtenir des résultats. Ce projet est plus tourné autour de la réflexion et de la stratégie d'apprentissage que sur le développement en lui-même. 
+Techniquement, nous avons pu utiliser des outils de travail d'équipe et donc acquérir des compétences en travail d'équipe. Nous sommes globalement satisfait de ce projet car nous étions tous les quatre curieux de voir comment fonctionnait une telle intelligence artificielle.
 
 
 \end{document}
