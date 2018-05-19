@@ -1,0 +1,118 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%     STYLE POUR LES EXPOSÉS TECHNIQUES 
+%         3e année INSA de Rennes
+%
+%             NE PAS MODIFIER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{exptech}       % Fichier (./exptech.sty) contenant les styles pour 
+                           % l'expose technique (ne pas le modifier)
+
+%\linespread{1,6}          % Pour une version destinée à un relecteur,
+                           % décommenter cette commande (double interligne) 
+                           
+% UTILISEZ SPELL (correcteur orthographique) à accès simplifié depuis XEmacs
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{ \textbf{Etude pratique \\
+    Robot de combat darwinien} }
+\markright{Robot de combat darwinien} 
+                           % Pour avoir le titre de l'expose sur chaque page
+
+\author{Daniel \textsc{Haus}, Etienne \textsc{Rebout}, \\
+        Aurianne \textsc{Gilbert}, Antoine \textsc{Barroux} \\
+        \\
+        Tuteur : Christian \textsc{Raymond}}
+
+\date{}                    % Ne pas modifier
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}          
+
+\maketitle                 % Génère le titre
+\thispagestyle{empty}      % Supprime le numéro de page sur la 1re page
+
+
+
+\begin{abstract}
+Notre projet consiste en la conception et le développement d'un algorithme d'intelligence artificielle appliquée à un environnement de développement mis à disposition par IBM : Robocode. L'objectif est de faire apprendre à notre robot à se battre contre les robots par défaut fournis par Robocode à l'aide  d'un réseau de neurones dont les poids proviennent d'un apprentissage génétique. 
+\end{abstract} 
+
+\section{Remerciements}
+Nous tenions à remercier notre tuteur Christian RAYMOND qui a été très disponible à la fois pour nous expliquer les concepts cachés derrière ce projet, et pour nous guider dans nos recherches et nos réflexions. Il a su nous donner les conseils nécessaires en terme d'implémentation afin que nous puissions avancer de manière efficace.\\
+Nous souhaitions également remercier Pascal GARCIA qui s'est rendu disponible pour nous donner des pistes de réflexion autour du réseau de neurones et de son activation.
+
+\section{Introduction}  
+
+Ce projet s'inscrit dans le cadre des études pratiques proposées par l'INSA de Rennes, et a démarré en 2015 avec pour objectifs de réaliser une intelligence artificielle basée sur un réseau de neurones, le tout dans un environnement Robocode. Robocode est un jeu vidéo à but éducatif créé et distribué par IBM. Il nous permet de créer notre propre robot et de le faire se battre contre un ou plusieurs robots par défaut fournis par le jeu. Les robots sont représentés sous forme de tanks qui combattent dans un terrain. 
+
+\subsection{Outils utilisés}
+
+\subsection{Robocode}
+L'environnement du jeu dans lequel sont simulés tous les combats entre les robots.
+
+\subsubsection{Java}
+Robocode propose deux langages pour le développement de l'intelligence artificielle des robots : le Java ou le .NET. Darwini existant depuis maintenant trois ans, nous avons utilisé le Java car c'est le langage qui a été utilisé depuis le début du projet.
+
+\subsubsection{XML}
+Chaque robot généré est stocké sous la forme de son perceptron, au format XML. 
+
+\subsubsection{IntelliJ}
+L'IDE IntelliJ était utilisé par le groupe précédent et nous avait été présenté en cours. De plus il nous semblait plus simple d'utilisation qu'Eclipse, c'est pourquoi nous l'avons choisi.
+
+\subsubsection{GitHub}
+Nous avons créé un répertoire GitHub afin de pouvoir travailler autant chez nous qu'à l'INSA. De plus Git gère le fait que plusieurs personnes travaillent simultanément sur le même fichier ou permet de dupliquer le projet en "branche" lorsqu'une modification importante est en cours mais qu'elle ne fonctionne pas encore ce qui permet à la fois d'avoir un prototype fonctionnel et un prototype en développement. Nous avons choisi GitHub contrairement à GitLab car nous voulions conserver ce projet open-source.
+
+\subsubsection{API de Robocode}
+La documentation de Robocode fournie par IBM est à la base de ce projet. Elle contient à la fois une documentation complète du fonctionnement du jeu, mais également la documentation technique nous permettant de récupérer les données du jeu pendant un combat, sans quoi ce projet ne pourrait avancer.
+
+\section{Analyse de l'existant}  
+
+Comme expliqué plus haut, ce projet existe depuis 3 ans et consiste donc en une reprise et évolution d'un code existant. 
+
+\subsection{La conception}
+
+Ce serait pas mal de mettre l'uml ici ou d'expliquer un peu leur ancien modèle de données (= pas prore, en fouillis, les méthodes étaient situées random)
+
+Petite figure de l'ancien UML serait top
+
+
+
+Pour inclure une image, on doit aussi la convertir en EPS, avec
+la commande \texttt{convert}\footnote{
+disponible aussi sous Unix/Linux et à privilégier 
+car elle génère un EPS tout à fait standard 
+(au contraire de nombreux pilotes Windows).}
+\texttt{~image image.eps}, qui accepte pratiquement tous les formats d'images.
+
+
+\subsection{L'application}
+
+D'un point de vue de l'application, de nombreuses fonctionnalités étaient déjà en place. Voici celles sur lesquelles nous nous sommes basé : 
+
+\begin{itemize}
+\item Lancement d'un combat entre notre robot et un robot par défaut fourni par Robocode.
+\item Récupération des données pendant et après le combat.
+\item Gestion du perceptron à l'aide d'une classe Matrix.
+\item Gestion des données d'entrée et de sortie du perceptron.
+\item Apprentissage des poids du perceptron par un algorithme génétique.
+\end{itemize}
+
+\subsection{Conclusion} 
+ 
+Après l'analyse de l'existant, on pourrait croire que le projet touchait déjà à sa fin au moment où nous l'avons repris et pourtant, nous avons apporté beaucoup de modifications dans l'implémentation du processus à cause de problèmes majeurs, comme par exemple le système d'apprentissage génétique qui n'était pas fonctionnel. Nous verrons plus en détail dans la section suivante les problèmes d'implémentation rencontrés et les décisions que nous avons prises par rapport à ceux-ci.
+
+
+
+\section{Travail effectué}
+
+\bibliography{biblio}
+
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
