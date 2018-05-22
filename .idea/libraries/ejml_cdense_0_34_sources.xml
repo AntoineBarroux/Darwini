@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="ejml-cdense-0.34-sources">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-cdense-0.34.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-core-0.34.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-ddense-0.34.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-dsparse-0.34.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-experimental-0.34.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-fdense-0.34.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-simple-0.34.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-zdense-0.34.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-cdense-0.34-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-core-0.34-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-ddense-0.34-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-dsparse-0.34-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-experimental-0.34-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-fdense-0.34-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-simple-0.34-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/ejml-v0.34-libs/ejml-zdense-0.34-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

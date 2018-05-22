@@ -1,0 +1,5 @@
+@manual{ robocodeapi,
+       title = "Documentation technique de Robocode",
+       address = "http://robocode.sourceforge.net/docs/robocode/"
+       }
+       
