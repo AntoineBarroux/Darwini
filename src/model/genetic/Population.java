@@ -4,10 +4,7 @@ import controller.Darwini;
 //import model.perceptron.Matrix;
 import model.perceptron.Matrix;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,6 +22,14 @@ public class Population {
      * </p>
      */
     static final String POPULATION_DIRECTORY = "data/population/";
+
+    /**
+     * <p>
+     * The path to the csv file to save average fitness for each generation
+     * </p>
+     */
+    private static final String FITNESS_EVOLUTION_PATH = "fitness_evo.csv";
+
 
     /**
      * <p>
@@ -161,15 +166,15 @@ public class Population {
         Collections.sort(individuals);
         Collections.reverse(individuals);
 
+        moyenneScores(generation);
+
         saveBest();
 
-        computeMeanAndDeviation();
-
         killWeaklings();
+        computeMeanAndDeviation();
 
         loadBest();
 
-        //generateChildren();
         generateGaussianChildren();
 
         generation ++;
@@ -305,55 +310,79 @@ public class Population {
     private void computeMeanAndDeviation(){
         double value;
         int i, j, k;
+        Individual ind;
+        double somme = 0;
+        double ecart = 0;
 
-        for (i = 0; i<output_mean.getRowCount(); i++){
-            for (j = 0; j<output_mean.getColumnCount(); j++){
-                output_mean.set(i, j, (output_mean.get(i, j)/size));
-            }
-        }
-
-        for (i = 0; i < size; i++){
-            for (j = 0; j<HIDDEN_NEURONS; j++){
-                for (k = 0; k<OUTPUT_NEURONS; k++){
-                    // (x - xbar)^2
-                    Individual ind = individuals.get(i);
-                    value = Math.pow(ind.getPerceptron().getOutputWeights().get(j, k) - output_mean.get(j, k), 2);
-                    output_std_deviation.set(j, k, output_std_deviation.get(j, k) + value);
+        for (j = 0; j < HIDDEN_NEURONS; j++) {
+            for (k = 0; k < OUTPUT_NEURONS; k++) {
+                for (i = 0; i < individuals.size(); i++) {
+                    ind = individuals.get(i);
+                    somme += ind.getPerceptron().getOutputWeights().get(j, k);
                 }
+                output_mean.set(j, k, somme);
+                somme = 0;
             }
         }
 
-        for (i = 0; i<HIDDEN_NEURONS; i++) {
-            for (j = 0; j < OUTPUT_NEURONS; j++) {
-                output_std_deviation.set(i, j, Math.sqrt((output_std_deviation.get(i, j) / size)));
+        for (j = 0; j < HIDDEN_NEURONS; j++) {
+            for (k = 0; k < OUTPUT_NEURONS; k++) {
+                output_mean.set(j, k, output_mean.get(j, k)/(individuals.size()));
             }
         }
+
+
+        for (j = 0; j<HIDDEN_NEURONS; j++){
+            for (k = 0; k<OUTPUT_NEURONS; k++){
+                for (i = 0; i < individuals.size(); i++){
+                    // (x - xbar)^2
+                    ind = individuals.get(i);
+                    ecart += Math.pow(ind.getPerceptron().getOutputWeights().get(j, k) - output_mean.get(j, k), 2);
+                }
+                output_std_deviation.set(j, k, ecart);
+                ecart = 0;
+            }
+        }
+
+        for (j = 0; j<HIDDEN_NEURONS; j++) {
+            for (k = 0; k < OUTPUT_NEURONS; k++) {
+                value = Math.sqrt(output_std_deviation.get(j, k) / individuals.size());
+                output_std_deviation.set(j, k, value);
+            }
+        }
+
+        somme = 0;
 
         // Generate the average of output bias value
-        for (i = 0; i<OUTPUT_NEURONS; i++){
-            output_bias_mean.set(0, i, (output_bias_mean.get(0, i) / size));
-        }
-
-
-
-        System.out.println("OUTPUT BIAS MEAN");
-        System.out.println(output_bias_mean.toDebug());
-
-        for (i = 0; i < size; i++){
-            Individual ind = individuals.get(i);
-            System.out.println("OUTPUT BIAS");
-            System.out.println(ind.getPerceptron().getOutputBias().toDebug());
-            for (j = 0; j<OUTPUT_NEURONS; j++){
-                // (x - xbar)^2
-
-                value = Math.pow(ind.getPerceptron().getOutputBias().get(0, j) - output_bias_mean.get(0, j), 2);
-                output_bias_deviation.set(0, j, output_bias_deviation.get(0, j) + value);
+        for (k = 0; k<OUTPUT_NEURONS; k++){
+            for (i = 0; i < individuals.size(); i++) {
+                ind = individuals.get(i);
+                somme += ind.getPerceptron().getOutputBias().get(0, k);
             }
+            output_bias_mean.set(0, k, somme);
+            somme = 0;
         }
 
-        for (i = 0; i<OUTPUT_NEURONS; i++) {
-            output_bias_deviation.set(0, i, Math.sqrt((output_bias_deviation.get(0, i) / OUTPUT_NEURONS)));
+        for (k = 0; k<OUTPUT_NEURONS; k++) {
+            output_bias_mean.set(0, k, output_bias_mean.get(0, k)/individuals.size());
         }
+
+
+        for (k = 0; k<OUTPUT_NEURONS; k++){
+            for (i = 0; i < individuals.size(); i++){
+                // (x - xbar)^2
+                ind = individuals.get(i);
+                ecart += Math.pow(ind.getPerceptron().getOutputBias().get(0, k) - output_bias_mean.get(0, k), 2);
+            }
+            output_bias_deviation.set(0, k, ecart);
+            ecart = 0;
+        }
+
+        for (k = 0; k < OUTPUT_NEURONS; k++) {
+            value = Math.sqrt(output_bias_deviation.get(0, k) / individuals.size());
+            output_bias_deviation.set(0, k, value);
+        }
+        System.out.println("ok");
 
     }
 
@@ -458,8 +487,22 @@ public class Population {
         }
     }
 
-    private void sortIndividuals(){
-        individuals.sort(new IndividualsComparator());
+    private void moyenneScores(int nbGeneration) {
+        double somme = 0;
+        for (int i = 0; i < this.size; i++) {
+            somme += individuals.get(i).getFitness();
+        }
+        double moyenne = somme / this.size;
+
+
+        try(FileWriter fw = new FileWriter(FITNESS_EVOLUTION_PATH, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            out.println(nbGeneration + ";" + moyenne + ";");
+        } catch (IOException e) {
+            System.out.println("IOException: " + FITNESS_EVOLUTION_PATH + " was not found or could not be opened.");
+        }
     }
 
 

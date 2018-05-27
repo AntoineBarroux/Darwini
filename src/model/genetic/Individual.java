@@ -216,6 +216,25 @@ public class Individual implements Comparable {
                     int hitsWall = Integer.parseInt(mdod.group(1));
                     int hitByBullet = Integer.parseInt(mdod.group(2));
 
+                    try {
+                        Stream<String> streamSeen = Files.lines(Paths.get("seen.txt"));
+                        Optional<String> seen = streamSeen.filter(line -> line.contains("seen"))
+                                .findFirst();
+                        if (!seen.isPresent()) {
+                            throw new IllegalStateException("No seen found in the seen's file");
+                        }
+                        String[] see = seen.get().split("\t");
+                        Matcher msee = Pattern.compile("(\\d+)\\s*(\\d+)").matcher(see[1]);
+                        if (!msee.find()) {
+                            throw new IllegalStateException("Unable to find data matching regex in the seen's file");
+                        }
+
+
+                        int nbSeen = Integer.parseInt(msee.group(1));
+                        int nbNotSeen = Integer.parseInt(msee.group(2));
+
+
+
                     /*fitness = 20 * bulletDamage
                             + 10 * survival
                             + ramDamage
@@ -224,10 +243,16 @@ public class Individual implements Comparable {
                             - 1000*hitsWall
                             - 5*hitByBullet*/
 
-                    fitness = 100 * hits
-                            - 15 * missed;
+                        fitness = 10 * bulletDamage
+                                + 10 * totalScore
+                                - hitByBullet
+                                + 10 * nbSeen
+                                - 10 * nbNotSeen;
 
-                    System.out.println("Fitness of robot " + index + " : " + fitness);
+                        System.out.println("Fitness of robot " + index + " : " + fitness);
+                    } catch(IOException e){
+                        System.err.println("Unable to open the seen's file...");
+                    }
 
 
                 } catch(IOException e){

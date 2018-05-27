@@ -343,7 +343,6 @@ public class NeuralNetwork {
             for (int j = 0; j < matrix.getColumnCount(); j++) {
                 value = Math.random() * 2 - 1;
                 matrix.set(i, j, value);
-                output_mean.set(i, j, (output_mean.get(i, j)+value));
             }
         }
     }
@@ -361,7 +360,6 @@ public class NeuralNetwork {
             for (int j = 0; j < matrix.getColumnCount(); j++) {
                 value = Math.random();
                 matrix.set(i, j, value);
-                output_bias_mean.set(i, j, output_bias_mean.get(i, j) + value);
             }
         }
     }
@@ -409,12 +407,12 @@ public class NeuralNetwork {
         //Ajout du neurone de biais et application de la fonction sigmoïde
         vcouche.plus(inputBias);
 
+        for (int i = 0; i<vcouche.getColumnCount(); i++){
+            vcouche.set(0, i, sigmoid(vcouche.get(0, i)));
+        }
+
         vcouche = vcouche.mult(outputWeights);
         vcouche.plus(outputBias);
-
-
-        /*for (int i = 0; i < inputWeights.getColumnCount(); i++)
-            vcouche.set(0, i, 1 / (1 + Math.exp(-vcouche.get(0, i) - inputBias.get(i, 0)))); */
 
         // Second Treatment
         //Multiplication du vecteur de couche avec la seconde matrice de poids pour obtenir le vecteur de sortie
@@ -542,4 +540,7 @@ public class NeuralNetwork {
         return str;
     }
 
+    public double sigmoid(double i) {
+        return 1 / (1 + Math.exp(i));
+    }
 }
